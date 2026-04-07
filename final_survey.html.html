@@ -1,0 +1,1714 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Laserglow – Modex Survey</title>
+    <script src="html5-qrcode.min.js"></script>
+    <style>
+      :root {
+        --red: #e8384f;
+        --red-dark: #c42032;
+        --navy: #0f2544;
+        --navy-2: #19345b;
+        --blue: #2d80c3;
+        --muted: #66758a;
+        --border: #e2e8f0;
+        --bg: #f0f3f8;
+        --panel: #f8fafc;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        min-height: 100vh;
+        font-family: Arial, Helvetica, sans-serif;
+        background: var(--bg);
+        color: var(--navy);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .header {
+        background: #fff;
+        border-bottom: 3px solid var(--red);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        padding: 14px 20px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .logo-mark {
+        width: 44px;
+        height: 44px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .logo-mark.custom-logo {
+        background: transparent;
+        border-radius: 0;
+        padding: 0;
+      }
+
+      .logo-mark.custom-logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+      }
+
+      .header-text h1 {
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: var(--navy);
+        letter-spacing: -0.02em;
+      }
+
+      .header-text p {
+        font-size: 0.78rem;
+        color: var(--muted);
+        margin-top: 1px;
+      }
+
+      .main {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 16px 16px 48px;
+      }
+
+      .tab-bar {
+        display: flex;
+        gap: 4px;
+        background: #fff;
+        border-radius: 14px;
+        padding: 5px;
+        box-shadow: 0 2px 10px rgba(15, 37, 68, 0.08);
+        border: 1px solid var(--border);
+        margin-bottom: 16px;
+      }
+
+      .tab-btn {
+        flex: 1;
+        padding: 12px 10px;
+        border: none;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 0.92rem;
+        cursor: pointer;
+        transition: all 0.15s;
+        background: transparent;
+        color: var(--muted);
+      }
+
+      .tab-btn.active {
+        background: var(--red);
+        color: #fff;
+        box-shadow: 0 4px 12px rgba(232, 56, 79, 0.3);
+      }
+
+      .badge {
+        display: inline-block;
+        margin-left: 7px;
+        background: var(--red);
+        color: #fff;
+        border-radius: 999px;
+        padding: 2px 7px;
+        font-size: 0.75rem;
+      }
+
+      .tab-btn.active .badge {
+        background: rgba(255, 255, 255, 0.28);
+      }
+
+      .toast {
+        padding: 12px 16px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 14px;
+        display: none;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .toast.show {
+        display: flex;
+      }
+      .toast.success {
+        background: #eefaf3;
+        border: 1px solid #98dfb7;
+        color: #16663c;
+      }
+      .toast.info {
+        background: #edf5fe;
+        border: 1px solid #a8c8eb;
+        color: #1c4f8f;
+      }
+      .toast.warning {
+        background: #fff8eb;
+        border: 1px solid #f0cf7a;
+        color: #8a5a08;
+      }
+
+      .card {
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 8px 28px rgba(15, 37, 68, 0.1);
+        border: 1px solid var(--border);
+        overflow: hidden;
+      }
+
+      .card-header {
+        background: linear-gradient(135deg, var(--navy), var(--navy-2));
+        padding: 18px 22px;
+      }
+
+      .card-header .kicker {
+        color: rgba(255, 255, 255, 0.55);
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .card-header .title {
+        color: #fff;
+        font-size: 1.2rem;
+        font-weight: 800;
+        margin-top: 3px;
+      }
+
+      .card-body {
+        padding: 22px;
+      }
+
+      .step-label {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin-bottom: 12px;
+      }
+
+      .step-num {
+        background: var(--red);
+        color: #fff;
+        width: 28px;
+        height: 28px;
+        border-radius: 999px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 0.82rem;
+        flex-shrink: 0;
+      }
+
+      .step-text {
+        font-weight: 700;
+        color: var(--navy);
+        font-size: 0.95rem;
+      }
+
+      .scan-shell {
+        background: linear-gradient(180deg, #fbfdff, #f5f8fc);
+        border: 1.5px solid var(--border);
+        border-radius: 16px;
+        padding: 14px;
+        margin-bottom: 18px;
+      }
+
+      .scan-topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+      }
+
+      .scan-topbar-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+      }
+
+      .scan-status-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #cbd5e1;
+        flex-shrink: 0;
+      }
+
+      .scan-status-dot.active {
+        background: var(--red);
+        box-shadow: 0 0 0 4px rgba(232, 56, 79, 0.12);
+      }
+
+      .scan-title {
+        font-size: 0.88rem;
+        font-weight: 800;
+        color: var(--navy);
+      }
+
+      .scan-subtext {
+        font-size: 0.78rem;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+
+      .scan-toggle {
+        border: 1.5px solid var(--border);
+        background: #fff;
+        color: var(--navy);
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: inherit;
+        white-space: nowrap;
+      }
+
+      .scan-compact-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto auto;
+        gap: 10px;
+        align-items: end;
+      }
+
+      .mini-field label {
+        display: block;
+        font-weight: 700;
+        font-size: 0.8rem;
+        color: var(--navy);
+        margin-bottom: 6px;
+        margin-top: 0;
+      }
+
+      .mini-input-wrap {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .mini-input-wrap input[type="text"] {
+        width: 100%;
+        padding: 11px 13px;
+        font-size: 0.9rem;
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        outline: none;
+        background: #fff;
+        color: var(--navy);
+        font-family: inherit;
+        transition:
+          border-color 0.15s,
+          box-shadow 0.15s;
+      }
+
+      .mini-input-wrap input[type="text"]:focus {
+        border-color: var(--red);
+        box-shadow: 0 0 0 3px rgba(232, 56, 79, 0.12);
+      }
+
+      .inline-icon-btn {
+        border: 1.5px solid var(--border);
+        background: #fff;
+        color: var(--muted);
+        border-radius: 10px;
+        min-width: 42px;
+        height: 42px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-family: inherit;
+      }
+
+      .scan-actions-inline {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .scan-details {
+        display: none;
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px dashed #dbe3ee;
+      }
+
+      .scan-details.open {
+        display: block;
+      }
+
+      #qr-box {
+        border: 2px dashed var(--border);
+        border-radius: 14px;
+        background: #f8fafb;
+        overflow: hidden;
+        transition: border-color 0.2s;
+        max-width: 420px;
+        margin: 0 auto;
+      }
+
+      #qr-box.scanning {
+        border-color: var(--red);
+      }
+      #qr-reader {
+        width: 100%;
+      }
+
+      .qr-placeholder {
+        padding: 20px 16px;
+        text-align: center;
+        min-height: 160px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .qr-placeholder .icon {
+        font-size: 2.2rem;
+      }
+
+      .qr-placeholder p {
+        color: var(--muted);
+        font-size: 0.85rem;
+        margin-top: 8px;
+      }
+
+      .camera-inline-note {
+        margin-top: 10px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
+
+      .btn {
+        border: none;
+        border-radius: 10px;
+        padding: 11px 18px;
+        font-size: 0.88rem;
+        font-weight: 700;
+        cursor: pointer;
+        min-height: 42px;
+        transition: all 0.15s;
+        font-family: inherit;
+      }
+
+      .btn:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+      }
+
+      .btn-navy {
+        background: linear-gradient(135deg, var(--navy), var(--navy-2));
+        color: #fff;
+      }
+      .btn-red {
+        background: linear-gradient(135deg, var(--red), var(--red-dark));
+        color: #fff;
+        box-shadow: 0 4px 14px rgba(232, 56, 79, 0.3);
+      }
+      .btn-ghost {
+        background: #f3f6fb;
+        color: var(--navy);
+        border: 1.5px solid var(--border);
+      }
+
+      .btn-inline-small {
+        background: #fff;
+        color: var(--muted);
+        border: 1.5px solid var(--border);
+        border-radius: 10px;
+        padding: 8px 12px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: inherit;
+      }
+
+      label {
+        display: block;
+        font-weight: 700;
+        font-size: 0.88rem;
+        color: var(--navy);
+        margin-bottom: 6px;
+        margin-top: 18px;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        padding: 13px 15px;
+        font-size: 0.95rem;
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        outline: none;
+        background: #fafcff;
+        color: var(--navy);
+        font-family: inherit;
+        transition:
+          border-color 0.15s,
+          box-shadow 0.15s;
+      }
+
+      input[type="text"]:focus {
+        border-color: var(--red);
+        box-shadow: 0 0 0 3px rgba(232, 56, 79, 0.12);
+      }
+
+      .section-divider {
+        margin: 18px 0 16px;
+        border-top: 2px dashed #e8edf4;
+        position: relative;
+        text-align: center;
+      }
+
+      .section-divider span {
+        position: absolute;
+        top: -11px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #fff;
+        padding: 0 12px;
+        color: var(--muted);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+      }
+
+      .question-stage {
+        background: linear-gradient(180deg, #ffffff, #fbfdff);
+        border: 1.5px solid var(--border);
+        border-radius: 18px;
+        padding: 18px;
+      }
+
+      .prog-wrap {
+        height: 8px;
+        background: #eef2f7;
+        border-radius: 999px;
+        margin-bottom: 18px;
+        overflow: hidden;
+      }
+
+      .prog-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--red), var(--red-dark));
+        border-radius: 999px;
+        transition: width 0.3s;
+      }
+
+      .q-shell {
+        background: linear-gradient(180deg, #fafcff, #f3f7fc);
+        border: 1.5px solid var(--border);
+        border-radius: 16px;
+        padding: 22px;
+        min-height: 280px;
+      }
+
+      .q-tag {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: #fff1f2;
+        color: var(--red);
+        font-weight: 700;
+        font-size: 0.75rem;
+        margin-bottom: 14px;
+        border: 1px solid #fcc8cd;
+      }
+
+      .q-text {
+        font-size: 1.35rem;
+        font-weight: 800;
+        line-height: 1.35;
+        margin-bottom: 18px;
+        letter-spacing: -0.02em;
+      }
+
+      .options {
+        display: grid;
+        gap: 12px;
+      }
+
+      .opt-btn {
+        width: 100%;
+        text-align: left;
+        border: 1.5px solid var(--border);
+        border-radius: 14px;
+        padding: 16px 18px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.15s;
+        background: #fff;
+        color: var(--navy);
+        font-family: inherit;
+      }
+
+      .opt-btn:hover {
+        background: #fff8f8;
+        border-color: var(--red);
+        transform: translateY(-1px);
+      }
+
+      .opt-btn.picked {
+        background: var(--red);
+        color: #fff;
+        border-color: var(--red);
+        box-shadow: 0 4px 12px rgba(232, 56, 79, 0.25);
+      }
+
+      .question-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-top: 12px;
+        flex-wrap: wrap;
+      }
+
+      .done-screen {
+        text-align: center;
+        padding: 36px 20px;
+      }
+
+      .done-screen .tick {
+        font-size: 3rem;
+        margin-bottom: 12px;
+      }
+
+      .done-screen h3 {
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: var(--navy);
+      }
+
+      .done-screen p {
+        color: var(--muted);
+        font-size: 0.9rem;
+        margin: 8px 0 22px;
+      }
+
+      .not-started {
+        text-align: center;
+        padding: 44px 20px;
+      }
+
+      .not-started .icon {
+        font-size: 2.8rem;
+        margin-bottom: 10px;
+      }
+
+      .not-started h3 {
+        font-weight: 800;
+        font-size: 1.08rem;
+        color: var(--navy);
+      }
+
+      .not-started p {
+        color: var(--muted);
+        font-size: 0.9rem;
+        margin-top: 6px;
+      }
+
+      .meta-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .meta-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: #f3f6fb;
+        border: 1px solid #dde5f0;
+        border-radius: 999px;
+        padding: 6px 12px;
+        font-size: 0.82rem;
+        color: var(--muted);
+      }
+
+      .meta-pill strong {
+        color: var(--navy);
+      }
+
+      .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 12px;
+        margin-bottom: 22px;
+      }
+
+      .stat-card {
+        background: #f8fafb;
+        border: 1.5px solid var(--border);
+        border-radius: 14px;
+        padding: 14px 16px;
+      }
+
+      .stat-card .num {
+        font-size: 1.7rem;
+        font-weight: 800;
+      }
+
+      .stat-card .lbl {
+        font-size: 0.8rem;
+        color: var(--muted);
+        font-weight: 600;
+        margin-top: 2px;
+      }
+
+      .table-scroll {
+        overflow-x: auto;
+        border: 1.5px solid var(--border);
+        border-radius: 14px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 760px;
+      }
+
+      th {
+        background: #f7f9fc;
+        text-align: left;
+        padding: 11px 13px;
+        font-size: 0.8rem;
+        font-weight: 800;
+        color: var(--navy);
+        border-bottom: 2px solid var(--border);
+        white-space: nowrap;
+        position: sticky;
+        top: 0;
+      }
+
+      td {
+        text-align: left;
+        padding: 10px 13px;
+        font-size: 0.85rem;
+        color: var(--navy);
+        border-bottom: 1px solid #edf2f7;
+        vertical-align: top;
+      }
+
+      tr:hover td {
+        background: #f8fbff;
+      }
+
+      .id-badge {
+        background: #fff1f2;
+        color: var(--red);
+        border-radius: 6px;
+        padding: 3px 7px;
+        font-size: 0.78rem;
+        font-weight: 700;
+      }
+
+      .status-pill {
+        display: inline-block;
+        border-radius: 999px;
+        padding: 4px 9px;
+        font-size: 0.76rem;
+        font-weight: 700;
+        border: 1px solid var(--border);
+        white-space: nowrap;
+      }
+
+      .status-pill.completed {
+        background: #eefaf3;
+        color: #16663c;
+        border-color: #98dfb7;
+      }
+
+      .status-pill.partial {
+        background: #fff8eb;
+        color: #8a5a08;
+        border-color: #f0cf7a;
+      }
+
+      .muted-text {
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 52px 20px;
+      }
+
+      .empty-state .icon {
+        font-size: 3rem;
+        margin-bottom: 12px;
+      }
+
+      .empty-state h3 {
+        font-weight: 700;
+        font-size: 1rem;
+        color: var(--navy);
+      }
+
+      .empty-state p {
+        color: var(--muted);
+        font-size: 0.85rem;
+        margin-top: 5px;
+      }
+
+      .card-header-actions {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .header-btn-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .btn-sm {
+        padding: 8px 14px;
+        font-size: 0.82rem;
+        min-height: auto;
+        border-radius: 9px;
+      }
+
+      @media (max-width: 700px) {
+        .scan-compact-row {
+          grid-template-columns: 1fr;
+        }
+
+        .scan-actions-inline {
+          width: 100%;
+        }
+
+        .scan-actions-inline .btn {
+          flex: 1;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .btn {
+          width: 100%;
+          min-width: 0;
+        }
+        .header-btn-row .btn {
+          width: auto;
+        }
+        .q-text {
+          font-size: 1.16rem;
+        }
+        .opt-btn {
+          font-size: 0.95rem;
+          padding: 15px 16px;
+        }
+        .question-stage {
+          padding: 14px;
+        }
+        .q-shell {
+          padding: 18px;
+          min-height: 240px;
+        }
+        .question-actions {
+          align-items: stretch;
+        }
+        .question-actions > * {
+          width: 100%;
+        }
+        .btn-inline-small {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="logo-mark custom-logo">
+        <img src="icon_red.png" alt="Laserglow logo" />
+      </div>
+      <div class="header-text">
+        <h1>Modex Trade Show</h1>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab(0)" id="tab0">
+          Survey
+        </button>
+        <button class="tab-btn" onclick="switchTab(1)" id="tab1">
+          Saved Submissions
+          <span class="badge" id="countBadge" style="display: none">0</span>
+        </button>
+      </div>
+
+      <div class="toast" id="toast"></div>
+
+      <div id="tabPanel0">
+        <div class="card">
+          <div class="card-header">
+            <div class="title">Survey Questions</div>
+          </div>
+
+          <div class="card-body">
+            <div id="section1Wrap">
+              <div class="step-label">
+                <div class="step-num">1</div>
+                <div class="step-text">Visitor Scan / ID</div>
+              </div>
+
+              <div class="scan-shell">
+                <div class="scan-topbar">
+                  <div class="scan-topbar-left">
+                    <div class="scan-status-dot" id="scanStatusDot"></div>
+                    <div>
+                      <div class="scan-title">Compact visitor check-in</div>
+                    </div>
+                  </div>
+                  <button
+                    class="scan-toggle"
+                    type="button"
+                    id="scanToggleBtn"
+                    onclick="toggleScanDetails()"
+                  >
+                    Show scan tools
+                  </button>
+                </div>
+
+                <div class="scan-compact-row">
+                  <div class="mini-field">
+                    <label for="qrInputMasked">Visitor ID</label>
+                    <div class="mini-input-wrap">
+                      <input
+                        type="text"
+                        id="qrInputMasked"
+                        placeholder="No ID captured yet"
+                        readonly
+                      />
+                      <button
+                        class="inline-icon-btn"
+                        type="button"
+                        id="revealBtn"
+                        onclick="toggleRevealId()"
+                        title="Show or hide full value"
+                      >
+                        👁
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="scan-actions-inline">
+                    <button
+                      class="btn btn-navy"
+                      id="startCamBtn"
+                      onclick="startCamera()"
+                    >
+                      📷 Scan
+                    </button>
+                    <button
+                      class="btn btn-ghost"
+                      id="stopCamBtn"
+                      onclick="stopCamera()"
+                      style="display: none"
+                    >
+                      ⏹ Stop
+                    </button>
+                  </div>
+
+                  <div class="scan-actions-inline">
+                    <button
+                      class="btn btn-red"
+                      id="continueBtn"
+                      onclick="startSurvey()"
+                    >
+                      ▶ Start Survey
+                    </button>
+                  </div>
+                </div>
+
+                <div class="scan-details" id="scanDetails">
+                  <div id="qr-box">
+                    <div id="qr-reader"></div>
+                    <div class="qr-placeholder" id="qrPlaceholder">
+                      <div class="icon">📷</div>
+                      <p>Tap “Scan” to read a badge QR code</p>
+                    </div>
+                  </div>
+
+                  <div class="camera-inline-note">
+                    The scanned value is hidden by default and shown as a masked
+                    visitor ID.
+                  </div>
+
+                  <div
+                    id="cameraError"
+                    style="
+                      display: none;
+                      margin-top: 10px;
+                      padding: 10px 14px;
+                      background: #fff1f2;
+                      border: 1px solid #f0a8b0;
+                      border-radius: 10px;
+                      color: #9c1f2d;
+                      font-size: 0.87rem;
+                    "
+                  >
+                    ⚠️ Camera not available. Allow camera access or type the ID
+                    manually below.
+                  </div>
+
+                  <label for="qrInput">Manual ID Entry</label>
+                  <input
+                    type="text"
+                    id="qrInput"
+                    placeholder="Type a visitor ID if needed…"
+                    oninput="updateMeta()"
+                    autocomplete="off"
+                    spellcheck="false"
+                  />
+                </div>
+              </div>
+
+              <div class="section-divider"><span>QUESTIONS</span></div>
+            </div>
+
+            <div class="question-stage" id="questionStage">
+              <div class="step-label">
+                <div class="step-num">2</div>
+                <div class="step-text">Answer Survey Questions</div>
+                <span
+                  style="
+                    margin-left: auto;
+                    color: var(--muted);
+                    font-size: 0.82rem;
+                    font-weight: 600;
+                  "
+                  id="stepCounter"
+                ></span>
+              </div>
+
+              <div class="prog-wrap">
+                <div class="prog-fill" id="progFill" style="width: 0%"></div>
+              </div>
+
+              <div id="questionArea">
+                <div class="not-started">
+                  <div class="icon">🎯</div>
+                  <h3>Questions will appear here</h3>
+                  <p>
+                    Scan a QR code, enter an ID, or tap “Start Survey” to begin.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="meta-bar">
+              <div class="meta-pill">
+                Saved: <strong id="metaTotal">0</strong>
+              </div>
+              <div class="meta-pill">
+                Current ID: <strong id="metaId">None</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tabPanel1" style="display: none">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-header-actions">
+              <div>
+                <div class="kicker">Data Export</div>
+                <div class="title">
+                  Saved Submissions <span class="badge" id="submCount">0</span>
+                </div>
+              </div>
+              <div class="header-btn-row">
+                <button
+                  class="btn btn-red btn-sm"
+                  id="exportBtn"
+                  onclick="exportCSV()"
+                >
+                  ⬇ Export CSV
+                </button>
+                <button
+                  class="btn btn-sm"
+                  style="
+                    background: rgba(255, 255, 255, 0.12);
+                    color: #fff;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                  "
+                  onclick="confirmDeleteAll()"
+                >
+                  🗑 Clear All
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="submissionsContent"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const SURVEY = {
+        start: "hazard_awareness",
+        questions: {
+          hazard_awareness: {
+            id: "hazard_awareness",
+            text: "Are you familiar with Hazard Awareness?",
+            opts: ["Yes", "No"],
+            next: {
+              Yes: "heard_of_laserglow",
+              No: "first_impression",
+            },
+          },
+
+          heard_of_laserglow: {
+            id: "heard_of_laserglow",
+            text: "Have you heard of Laserglow?",
+            opts: ["Yes", "No"],
+            next: {
+              Yes: "laserglow_position",
+              No: "hazard_confidence",
+            },
+          },
+
+          laserglow_position: {
+            id: "laserglow_position",
+            text: "How do you see Laserglow?",
+            opts: [
+              "A trusted partner we work with",
+              "A reliable provider of safety solutions",
+              "A supplier of safety products",
+              "Not very familiar — still learning what they do",
+            ],
+            next: "safety_triggers_end",
+          },
+
+          hazard_confidence: {
+            id: "hazard_confidence",
+            text: "How confident are you that workers consistently notice hazards?",
+            opts: [
+              "Very confident",
+              "Somewhat confident",
+              "Not very confident",
+            ],
+            next: "safety_triggers_continue",
+          },
+
+          safety_triggers_end: {
+            id: "safety_triggers_end",
+            exportKey: "safety_triggers",
+            text: "What typically triggers updates to your safety program?",
+            opts: [
+              "Incidents or near misses",
+              "Audits or compliance requirements",
+              "Ongoing improvement initiatives",
+              "Leadership direction",
+            ],
+            next: null,
+          },
+
+          safety_triggers_continue: {
+            id: "safety_triggers_continue",
+            exportKey: "safety_triggers",
+            text: "What typically triggers updates to your safety program?",
+            opts: [
+              "Incidents or near misses",
+              "Audits or compliance requirements",
+              "Ongoing improvement initiatives",
+              "Leadership direction",
+            ],
+            next: "safety_priorities",
+          },
+
+          safety_priorities: {
+            id: "safety_priorities",
+            text: "What matters most to you when it comes to safety?",
+            opts: [
+              "Knowing my team goes home safe every day",
+              "Feeling confident hazards won't be missed",
+              "Continuously improving how we manage risk",
+              "Building and maintaining a safe environment",
+            ],
+            next: null,
+          },
+
+          first_impression: {
+            id: "first_impression",
+            text: "What was your first impression of Laserglow?",
+            opts: [
+              "Innovative: feels like a new way of doing things",
+              "Advanced: more technical than what I usually see",
+              "Different: stood out from most other booths",
+              "Unclear: I couldn't really tell what it was about",
+            ],
+            next: "share_with_company",
+          },
+
+          share_with_company: {
+            id: "share_with_company",
+            text: "If this resonated, how would you share it with others at your company?",
+            opts: [
+              "I would bring it forward directly",
+              "I would discuss it with my manager/team",
+              "It would need to go through a formal process",
+              "I wouldn't typically be involved",
+            ],
+            next: null,
+          },
+        },
+      };
+
+      let submissions = [];
+      try {
+        submissions = JSON.parse(
+          localStorage.getItem("lg_submissions") || "[]",
+        );
+      } catch {
+        submissions = [];
+      }
+
+      let currentQuestionId = null;
+      let currentAnswers = {};
+      let questionPath = [];
+      let currentFlowLength = 0;
+      let html5Qr = null;
+      let toastTimer = null;
+      let scanDetailsOpen = false;
+      let revealId = false;
+      let surveyStarted = false;
+
+      function switchTab(i) {
+        document.getElementById("tabPanel0").style.display =
+          i === 0 ? "" : "none";
+        document.getElementById("tabPanel1").style.display =
+          i === 1 ? "" : "none";
+        document.getElementById("tab0").classList.toggle("active", i === 0);
+        document.getElementById("tab1").classList.toggle("active", i === 1);
+        if (i === 1) renderSubmissions();
+      }
+
+      function showToast(msg, type = "success") {
+        const el = document.getElementById("toast");
+        const icons = { success: "✅", info: "ℹ️", warning: "⚠️" };
+        el.innerHTML = `<span>${icons[type] || "ℹ️"}</span> ${msg}`;
+        el.className = `toast show ${type}`;
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          el.className = "toast";
+        }, 3500);
+      }
+
+      function maskSensitiveValue(value) {
+        const str = String(value || "").trim();
+        if (!str) return "";
+        if (str.length <= 6) return "••••••";
+        return str.slice(0, 4) + "••••••" + str.slice(-4);
+      }
+
+      function displayVisitorId() {
+        const raw = document.getElementById("qrInput").value.trim();
+        const maskedInput = document.getElementById("qrInputMasked");
+
+        if (!raw) {
+          maskedInput.value = "";
+          maskedInput.placeholder = "No ID captured yet";
+          return;
+        }
+
+        maskedInput.value = revealId ? raw : maskSensitiveValue(raw);
+      }
+
+      function toggleRevealId() {
+        revealId = !revealId;
+        document.getElementById("revealBtn").textContent = revealId
+          ? "🙈"
+          : "👁";
+        displayVisitorId();
+        updateMeta();
+      }
+
+      function toggleScanDetails(forceOpen) {
+        if (surveyStarted) return;
+
+        if (typeof forceOpen === "boolean") {
+          scanDetailsOpen = forceOpen;
+        } else {
+          scanDetailsOpen = !scanDetailsOpen;
+        }
+
+        document
+          .getElementById("scanDetails")
+          .classList.toggle("open", scanDetailsOpen);
+        document.getElementById("scanToggleBtn").textContent = scanDetailsOpen
+          ? "Hide scan tools"
+          : "Show scan tools";
+      }
+
+      function updateSectionVisibility() {
+        document.getElementById("section1Wrap").style.display = surveyStarted
+          ? "none"
+          : "";
+      }
+
+      function startCamera() {
+        if (surveyStarted) return;
+
+        toggleScanDetails(true);
+        document.getElementById("cameraError").style.display = "none";
+        document.getElementById("qrPlaceholder").style.display = "none";
+        document.getElementById("qr-box").classList.add("scanning");
+        document.getElementById("scanStatusDot").classList.add("active");
+
+        if (html5Qr) return;
+
+        html5Qr = new Html5Qrcode("qr-reader");
+        html5Qr
+          .start(
+            { facingMode: "environment" },
+            { fps: 10, qrbox: { width: 220, height: 220 } },
+            (decoded) => {
+              document.getElementById("qrInput").value = decoded;
+              updateMeta();
+              stopCamera();
+              startSurvey();
+              showToast("Visitor ID captured.", "info");
+            },
+            () => {},
+          )
+          .then(() => {
+            document.getElementById("startCamBtn").style.display = "none";
+            document.getElementById("stopCamBtn").style.display = "";
+          })
+          .catch(() => {
+            document.getElementById("cameraError").style.display = "block";
+            document.getElementById("qrPlaceholder").style.display = "";
+            document.getElementById("qr-box").classList.remove("scanning");
+            document.getElementById("scanStatusDot").classList.remove("active");
+            html5Qr = null;
+          });
+      }
+
+      function stopCamera() {
+        if (html5Qr) {
+          html5Qr
+            .stop()
+            .then(() => {
+              html5Qr.clear();
+              html5Qr = null;
+            })
+            .catch(() => {
+              html5Qr = null;
+            });
+        }
+
+        document.getElementById("startCamBtn").style.display = "";
+        document.getElementById("stopCamBtn").style.display = "none";
+        document.getElementById("qrPlaceholder").style.display = "";
+        document.getElementById("qr-box").classList.remove("scanning");
+        document.getElementById("scanStatusDot").classList.remove("active");
+      }
+
+      function getMaxStepsFrom(questionId) {
+        if (!questionId) return 0;
+        const q = SURVEY.questions[questionId];
+        if (!q) return 0;
+        if (!q.next) return 1;
+
+        if (typeof q.next === "string") {
+          return 1 + getMaxStepsFrom(q.next);
+        }
+
+        let maxBranch = 0;
+        for (const key in q.next) {
+          maxBranch = Math.max(maxBranch, getMaxStepsFrom(q.next[key]));
+        }
+        return 1 + maxBranch;
+      }
+
+      function getNextQuestionId(question, answer) {
+        if (!question.next) return null;
+        if (typeof question.next === "string") return question.next;
+        return question.next[answer] || null;
+      }
+
+      function escapeAttr(str) {
+        return String(str).replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+      }
+
+      function startSurvey() {
+        surveyStarted = true;
+        updateSectionVisibility();
+
+        currentAnswers = {};
+        questionPath = [SURVEY.start];
+        currentQuestionId = SURVEY.start;
+        currentFlowLength = getMaxStepsFrom(SURVEY.start);
+
+        document.getElementById("continueBtn").textContent = "✓ Survey Started";
+        document.getElementById("continueBtn").disabled = true;
+
+        renderQuestion();
+      }
+
+      function renderQuestion() {
+        const area = document.getElementById("questionArea");
+        const prog = document.getElementById("progFill");
+        const ctr = document.getElementById("stepCounter");
+
+        if (!currentQuestionId) {
+          area.innerHTML = `
+              <div class="done-screen">
+                <div class="tick">🎉</div>
+                <h3>Thank you!</h3>
+                <p>Response saved. Ready for the next visitor.</p>
+                <button class="btn btn-red" onclick="resetSurvey()" style="font-size:1rem;padding:14px 28px;box-shadow:0 6px 20px rgba(232,56,79,0.35);">Start Next Survey →</button>
+              </div>
+            `;
+          prog.style.width = "100%";
+          ctr.textContent = "";
+          return;
+        }
+
+        const q = SURVEY.questions[currentQuestionId];
+        const currentIndex = questionPath.length;
+        const totalSteps = currentFlowLength || 1;
+        const pct = Math.round(((currentIndex - 1) / totalSteps) * 100);
+
+        prog.style.width = pct + "%";
+        ctr.textContent = `${currentIndex} / ${totalSteps}`;
+
+        const optsHtml = q.opts
+          .map((o) => {
+            const safeOption = escapeAttr(o);
+            return `
+              <button
+                class="opt-btn ${currentAnswers[q.id] === o ? "picked" : ""}"
+                onclick="pickOption('${q.id}', '${safeOption}')">
+                ${o}
+              </button>
+            `;
+          })
+          .join("");
+
+        const backBtn =
+          questionPath.length > 1
+            ? `<button onclick="goBack()" style="background:none;border:none;color:var(--muted);font-size:0.9rem;font-weight:700;cursor:pointer;padding:8px 0;">← Back</button>`
+            : `<span></span>`;
+
+        area.innerHTML = `
+            <div class="q-shell">
+              <div class="q-tag">Question ${currentIndex} of ${totalSteps}</div>
+              <div class="q-text">${q.text}</div>
+              <div class="options">${optsHtml}</div>
+            </div>
+
+            <div class="question-actions">
+              ${backBtn}
+              <button
+                type="button"
+                class="btn-inline-small"
+                onclick="submitEarly()"
+                title="Save current answers and end this survey"
+              >
+                End
+              </button>
+            </div>
+          `;
+      }
+
+      function pickOption(qId, option) {
+        const q = SURVEY.questions[qId];
+        const answerKey = q.exportKey || q.id;
+
+        currentAnswers[answerKey] = option;
+
+        const nextId = getNextQuestionId(q, option);
+
+        if (nextId) {
+          currentQuestionId = nextId;
+          questionPath.push(nextId);
+          currentFlowLength = questionPath.length - 1 + getMaxStepsFrom(nextId);
+          renderQuestion();
+          return;
+        }
+
+        saveSubmission(false);
+        currentQuestionId = null;
+        renderQuestion();
+      }
+
+      function goBack() {
+        if (questionPath.length <= 1) return;
+
+        const currentId = questionPath.pop();
+        delete currentAnswers[currentId];
+
+        currentQuestionId = questionPath[questionPath.length - 1];
+        currentFlowLength =
+          questionPath.length - 1 + getMaxStepsFrom(currentQuestionId);
+        renderQuestion();
+      }
+
+      function submitEarly() {
+        const hasId = document.getElementById("qrInput").value.trim();
+        const hasAnswers = Object.keys(currentAnswers).length > 0;
+
+        if (!hasId && !hasAnswers) {
+          showToast("Nothing to save yet.", "warning");
+          return;
+        }
+
+        saveSubmission(true);
+        currentQuestionId = null;
+        renderQuestion();
+      }
+
+      function resetSurvey() {
+        currentQuestionId = null;
+        currentAnswers = {};
+        questionPath = [];
+        currentFlowLength = 0;
+        surveyStarted = false;
+        scanDetailsOpen = false;
+        revealId = false;
+
+        stopCamera();
+
+        document.getElementById("qrInput").value = "";
+        document.getElementById("qrInputMasked").value = "";
+        document.getElementById("qrInputMasked").placeholder =
+          "No ID captured yet";
+        document.getElementById("revealBtn").textContent = "👁";
+        document.getElementById("continueBtn").textContent = "▶ Start Survey";
+        document.getElementById("continueBtn").disabled = false;
+        document.getElementById("scanDetails").classList.remove("open");
+        document.getElementById("scanToggleBtn").textContent =
+          "Show scan tools";
+
+        document.getElementById("questionArea").innerHTML = `
+            <div class="not-started">
+              <div class="icon">🎯</div>
+              <h3>Questions will appear here</h3>
+              <p>Scan a QR code, enter an ID, or tap “Start Survey” to begin.</p>
+            </div>
+          `;
+
+        document.getElementById("progFill").style.width = "0%";
+        document.getElementById("stepCounter").textContent = "";
+
+        updateSectionVisibility();
+        updateMeta();
+      }
+
+      function saveSubmission(partial = false) {
+        const entry = {
+          id: Date.now(),
+          qr_id: document.getElementById("qrInput").value.trim() || "No ID",
+          answers: { ...currentAnswers },
+          submitted_at: new Date().toLocaleString(),
+          completed: !partial,
+        };
+
+        submissions.unshift(entry);
+        localStorage.setItem("lg_submissions", JSON.stringify(submissions));
+        updateMeta();
+        showToast(
+          partial
+            ? "Partial submission saved."
+            : "Submission saved successfully!",
+          partial ? "info" : "success",
+        );
+      }
+
+      function updateMeta() {
+        const rawId = document.getElementById("qrInput").value.trim();
+        const n = submissions.length;
+
+        displayVisitorId();
+
+        document.getElementById("metaTotal").textContent = n;
+        document.getElementById("metaId").textContent = rawId
+          ? revealId
+            ? rawId
+            : maskSensitiveValue(rawId)
+          : "None";
+        document.getElementById("countBadge").textContent = n;
+        document.getElementById("countBadge").style.display =
+          n > 0 ? "" : "none";
+        document.getElementById("submCount").textContent = n;
+      }
+
+      function getAllQuestionColumns() {
+        return [
+          SURVEY.questions.hazard_awareness,
+          SURVEY.questions.heard_of_laserglow,
+          SURVEY.questions.laserglow_position,
+          SURVEY.questions.hazard_confidence,
+          {
+            id: "safety_triggers",
+            text: "What typically triggers updates to your safety program?",
+          },
+          SURVEY.questions.safety_priorities,
+          SURVEY.questions.first_impression,
+          SURVEY.questions.share_with_company,
+        ];
+      }
+
+      function renderSubmissions() {
+        const area = document.getElementById("submissionsContent");
+        document.getElementById("submCount").textContent = submissions.length;
+
+        if (!submissions.length) {
+          area.innerHTML = `
+              <div class="empty-state">
+                <div class="icon">📋</div>
+                <h3>No submissions yet</h3>
+                <p>Switch to the Survey tab to collect responses.</p>
+              </div>
+            `;
+          return;
+        }
+
+        const withId = submissions.filter(
+          (s) => s.qr_id && s.qr_id !== "No ID",
+        ).length;
+        const completedCount = submissions.filter(
+          (s) => s.completed !== false,
+        ).length;
+        const partialCount = submissions.filter(
+          (s) => s.completed === false,
+        ).length;
+
+        const statCards = `
+            <div class="stat-grid">
+              <div class="stat-card"><div class="num" style="color:var(--red)">${submissions.length}</div><div class="lbl">Total Responses</div></div>
+              <div class="stat-card"><div class="num" style="color:var(--navy)">${withId}</div><div class="lbl">With QR ID</div></div>
+              <div class="stat-card"><div class="num" style="color:var(--navy)">${completedCount}</div><div class="lbl">Completed</div></div>
+              <div class="stat-card"><div class="num" style="color:var(--red-dark)">${partialCount}</div><div class="lbl">Partial</div></div>
+            </div>
+          `;
+
+        const allQuestions = getAllQuestionColumns();
+        const thCols = allQuestions.map((q) => `<th>${q.text}</th>`).join("");
+
+        const rows = submissions
+          .map((s, i) => {
+            const ans = allQuestions
+              .map(
+                (q) =>
+                  `<td>${s.answers?.[q.id] || '<span class="muted-text">—</span>'}</td>`,
+              )
+              .join("");
+            const statusHtml =
+              s.completed === false
+                ? '<span class="status-pill partial">Partial</span>'
+                : '<span class="status-pill completed">Completed</span>';
+
+            return `
+              <tr>
+                <td>${submissions.length - i}</td>
+                <td><span class="id-badge">${s.qr_id || "—"}</span></td>
+                <td class="muted-text">${s.submitted_at || "—"}</td>
+                <td>${statusHtml}</td>
+                ${ans}
+              </tr>
+            `;
+          })
+          .join("");
+
+        area.innerHTML = `
+            ${statCards}
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Badge ID</th>
+                    <th>Submitted At</th>
+                    <th>Status</th>
+                    ${thCols}
+                  </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+              </table>
+            </div>
+          `;
+      }
+
+      function exportCSV() {
+        if (!submissions.length) return;
+
+        const allQuestions = getAllQuestionColumns();
+        const headers = [
+          "#",
+          "Badge ID",
+          "Submitted At",
+          "Status",
+          ...allQuestions.map((q) => q.text),
+        ];
+
+        const rows = submissions.map((s, i) => [
+          submissions.length - i,
+          `"${String(s.qr_id || "").replace(/"/g, '""')}"`,
+          `"${String(s.submitted_at || "").replace(/"/g, '""')}"`,
+          `"${s.completed === false ? "Partial" : "Completed"}"`,
+          ...allQuestions.map(
+            (q) => `"${String(s.answers?.[q.id] || "").replace(/"/g, '""')}"`,
+          ),
+        ]);
+
+        const csv = [headers.join(","), ...rows.map((r) => r.join(","))].join(
+          "\n",
+        );
+        const blob = new Blob([csv], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+
+        a.href = url;
+        a.download = `laserglow-survey-${new Date().toISOString().slice(0, 10)}.csv`;
+        a.click();
+
+        URL.revokeObjectURL(url);
+        showToast("CSV exported!", "success");
+      }
+
+      function confirmDeleteAll() {
+        if (confirm("Delete ALL saved submissions? This cannot be undone.")) {
+          submissions = [];
+          localStorage.removeItem("lg_submissions");
+          updateMeta();
+          renderSubmissions();
+          showToast("All submissions deleted.", "warning");
+        }
+      }
+
+      updateSectionVisibility();
+      updateMeta();
+    </script>
+  </body>
+</html>
