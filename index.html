@@ -557,43 +557,26 @@
         font-size: 1rem;
         font-weight: 700;
         cursor: pointer;
-        transition:
-          background 0.15s,
-          border-color 0.15s,
-          transform 0.15s,
-          box-shadow 0.15s;
+        transition: all 0.15s;
         background: #fff;
         color: var(--navy);
         font-family: inherit;
         -webkit-tap-highlight-color: transparent;
-        -webkit-appearance: none;
         appearance: none;
-        outline: none;
       }
 
       @media (hover: hover) and (pointer: fine) {
-        .opt-btn:hover:not(.picked) {
+        .opt-btn:hover {
           background: #fff8f8;
           border-color: var(--red);
           transform: translateY(-1px);
         }
       }
 
-      .opt-btn:focus {
-        outline: none;
-      }
-
+      .opt-btn:focus,
       .opt-btn:focus-visible {
         outline: 2px solid rgba(232, 56, 79, 0.35);
         outline-offset: 2px;
-      }
-
-      .opt-btn:active:not(.picked) {
-        background: #fff;
-        color: var(--navy);
-        border-color: var(--border);
-        transform: none;
-        box-shadow: none;
       }
 
       .opt-btn.picked {
@@ -1432,19 +1415,16 @@
         prog.style.width = pct + "%";
         ctr.textContent = `${currentIndex} / ${totalSteps}`;
 
-        const answerKey = q.exportKey || q.id;
-
         const optsHtml = q.opts
           .map((o) => {
             const safeOption = escapeAttr(o);
             return `
-      <button
-        type="button"
-        class="opt-btn ${currentAnswers[answerKey] === o ? "picked" : ""}"
-        onclick="pickOption('${q.id}', '${safeOption}')">
-        ${o}
-      </button>
-    `;
+              <button
+                class="opt-btn ${currentAnswers[q.id] === o ? "picked" : ""}"
+                onclick="pickOption('${q.id}', '${safeOption}')">
+                ${o}
+              </button>
+            `;
           })
           .join("");
 
@@ -1477,7 +1457,8 @@
       function pickOption(qId, option) {
         const q = SURVEY.questions[qId];
         const answerKey = q.exportKey || q.id;
-        currentAnswers[answerKey] === o;
+
+        currentAnswers[answerKey] = option;
 
         const nextId = getNextQuestionId(q, option);
 
