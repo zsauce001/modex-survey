@@ -1,4 +1,4 @@
-const CACHE_NAME = "offline-qr-form-v1";
+const CACHE_NAME = "offline-qr-form-v2";
 const APP_FILES = [
   "./",
   "./index.html",
