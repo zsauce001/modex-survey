@@ -561,12 +561,29 @@
         background: #fff;
         color: var(--navy);
         font-family: inherit;
+        -webkit-tap-highlight-color: transparent;
+        appearance: none;
       }
 
-      .opt-btn:hover {
-        background: #fff8f8;
+      @media (hover: hover) and (pointer: fine) {
+        .opt-btn:hover {
+          background: #fff8f8;
+          border-color: var(--red);
+          transform: translateY(-1px);
+        }
+      }
+
+      .opt-btn:focus,
+      .opt-btn:focus-visible {
+        outline: 2px solid rgba(232, 56, 79, 0.35);
+        outline-offset: 2px;
+      }
+
+      .opt-btn.picked {
+        background: var(--red);
+        color: #fff;
         border-color: var(--red);
-        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(232, 56, 79, 0.25);
       }
 
       .opt-btn.picked {
