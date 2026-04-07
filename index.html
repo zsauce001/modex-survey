@@ -6,6 +6,9 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#b00020" />
+    <link rel="manifest" href="./manifest.webmanifest" />
     <title>Laserglow – Modex Survey</title>
     <script src="html5-qrcode.min.js"></script>
     <style>
@@ -1709,13 +1712,16 @@
 
       updateSectionVisibility();
       updateMeta();
+    </script>
+
+    <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", async () => {
           try {
             await navigator.serviceWorker.register("./sw.js");
             console.log("Service worker registered");
           } catch (err) {
-            console.error("Service worker registration failed:", err);
+            console.error("Service worker failed:", err);
           }
         });
       }
